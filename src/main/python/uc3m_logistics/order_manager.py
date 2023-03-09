@@ -1,4 +1,6 @@
 """Module """
+from .order_request import OrderRequest
+
 
 class OrderManager:
     """Class for providing the methods for managing the orders"""
@@ -10,3 +12,8 @@ class OrderManager:
         """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
         OR FALSE IN OTHER CASE"""
         return True
+
+    @staticmethod
+    def register_order (product_id, order_type, address, phone_number, zip_code):
+        my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
+        return my_order.order_id
