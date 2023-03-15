@@ -71,4 +71,5 @@ class OrderManager:
         OrderManager.validate_order_type(order_type)
         OrderManager.validate_address(address)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
+        print(my_order)
         return my_order.order_id
