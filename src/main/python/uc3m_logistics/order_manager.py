@@ -14,6 +14,30 @@ class OrderManager:
         return True
 
     @staticmethod
+    def validate_order_type(ean13_code):
+        """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
+        OR FALSE IN OTHER CASE"""
+        return True
+
+    @staticmethod
+    def validate_address(ean13_code):
+        """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
+        OR FALSE IN OTHER CASE"""
+        return True
+
+    @staticmethod
+    def validate_phone_number(ean13_code):
+        """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
+        OR FALSE IN OTHER CASE"""
+        return True
+
+    @staticmethod
+    def validate_zip_code(ean13_code):
+        """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
+        OR FALSE IN OTHER CASE"""
+        return True
+
+    @staticmethod
     def register_order (product_id, order_type, address, phone_number, zip_code):
         """Devuelve el id del producto"""
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)

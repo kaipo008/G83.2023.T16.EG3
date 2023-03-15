@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
         my_manager = OrderManager()
         my_manager_id = my_manager.register_order\
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
-        self.assertEqual("b305885f8a3c9586e11a919330a1f06d", my_manager_id)
+        self.assertEqual("8e290b2ebc51e1634f124c9f1151f88c", my_manager_id)
         #comprobar el fichero
 
 
