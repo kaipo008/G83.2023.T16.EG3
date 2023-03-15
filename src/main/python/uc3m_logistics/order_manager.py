@@ -41,4 +41,5 @@ class OrderManager:
     def register_order (product_id, order_type, address, phone_number, zip_code):
         """Devuelve el id del producto"""
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
+        print(my_order)
         return my_order.order_id
