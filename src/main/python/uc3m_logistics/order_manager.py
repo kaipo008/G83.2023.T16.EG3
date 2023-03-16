@@ -77,7 +77,9 @@ class OrderManager:
             raise OrderManagementException("Invalid zip_code")
         if not zip_code.isdigit():
             raise OrderManagementException("Invalid zip_code")
-        if 1 <= int(zip_code[1:3]) <= 52:
+        if int(zip_code[0:2]) < 1:
+            raise OrderManagementException("Invalid zip_code")
+        if int(zip_code[0:2]) > 52:
             raise OrderManagementException("Invalid zip_code")
         return True
 
@@ -87,5 +89,7 @@ class OrderManager:
         OrderManager.validate_ean13(product_id)
         OrderManager.validate_order_type(order_type)
         OrderManager.validate_address(address)
+        OrderManager.validate_phone_number(phone_number)
+        OrderManager.validate_zip_code(zip_code)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
         return my_order.order_id

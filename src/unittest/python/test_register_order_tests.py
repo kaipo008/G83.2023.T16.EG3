@@ -106,7 +106,7 @@ class MyTestCase(unittest.TestCase):
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "28005")
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "12312a456789", "28005")
         self.assertEqual("Invalid phone_number", cm.exception.message)
 
     def test_ecv_26(self):
@@ -121,49 +121,49 @@ class MyTestCase(unittest.TestCase):
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "280105")
-        self.assertEqual("Invalid phone_number", cm.exception.message)
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "280105")
+        self.assertEqual("Invalid zip_code", cm.exception.message)
 
     def test_ecv_28(self):
         """4 digitos"""
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "2805")
-        self.assertEqual("Invalid phone_number", cm.exception.message)
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "2805")
+        self.assertEqual("Invalid zip_code", cm.exception.message)
 
     def test_ecv_29(self):
         """tiene letras"""
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "280a5")
-        self.assertEqual("Invalid phone_number", cm.exception.message)
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "280a5")
+        self.assertEqual("Invalid zip_code", cm.exception.message)
 
     def test_ecv_30(self):
         """first 2 digit less than 01"""
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "00005")
-        self.assertEqual("Invalid phone_number", cm.exception.message)
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "00005")
+        self.assertEqual("Invalid zip_code", cm.exception.message)
 
-    def test_ecv_30(self):
+    def test_ecv_31(self):
         """first 2 digit more than 52"""
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
             my_manager.register_order\
-                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "99005")
-        self.assertEqual("Invalid phone_number", cm.exception.message)
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "99005")
+        self.assertEqual("Invalid zip_code", cm.exception.message)
 
-    def test_ecv_31(self):
+    def test_ecv_32(self):
         """justo 01"""
         my_manager = OrderManager()
         my_manager_id = my_manager.register_order \
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "01005")
         self.assertEqual("c6f1b7087cba778077d8011d698c2ab0", my_manager_id)
 
-    def test_ecv_32(self):
+    def test_ecv_33(self):
         """justo 52"""
         my_manager = OrderManager()
         my_manager_id = my_manager.register_order \
