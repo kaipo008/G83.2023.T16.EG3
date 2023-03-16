@@ -53,15 +53,32 @@ class OrderManager:
         return True
 
     @staticmethod
-    def validate_phone_number(ean13_code):
+    def validate_phone_number(phone_number):
         """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
         OR FALSE IN OTHER CASE"""
+        if not isinstance(phone_number, str):
+            raise OrderManagementException("Invalid phone_number")
+        if len(phone_number) != 12:
+            raise OrderManagementException("Invalid phone_number")
+        if not phone_number[0] == "+":
+            raise OrderManagementException("Invalid phone_number")
+        for i in range(len(phone_number) - 1):
+            if not phone_number[i + 1].isdigit():
+                raise OrderManagementException("Invalid phone_number")
         return True
 
     @staticmethod
-    def validate_zip_code(ean13_code):
+    def validate_zip_code(zip_code):
         """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
         OR FALSE IN OTHER CASE"""
+        if not isinstance(zip_code, str):
+            raise OrderManagementException("Invalid zip_code")
+        if len(zip_code) != 5:
+            raise OrderManagementException("Invalid zip_code")
+        if not zip_code.isdigit():
+            raise OrderManagementException("Invalid zip_code")
+        if 1 <= int(zip_code[1:3]) <= 52:
+            raise OrderManagementException("Invalid zip_code")
         return True
 
     @staticmethod
@@ -71,5 +88,4 @@ class OrderManager:
         OrderManager.validate_order_type(order_type)
         OrderManager.validate_address(address)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
-        print(my_order)
         return my_order.order_id

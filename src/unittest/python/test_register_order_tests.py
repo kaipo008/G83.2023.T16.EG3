@@ -70,6 +70,105 @@ class MyTestCase(unittest.TestCase):
                 "MADRID DEMASIADA CONTAMINACION, SPAIN PERO SIN LA S", "+34123456789", "28005")
         self.assertEqual("Invalid address length", cm.exception.message)
 
+    def test_ecv_21(self):
+        """numero telefono bien"""
+        my_manager = OrderManager()
+        my_manager_id = my_manager.register_order \
+            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
+        self.assertEqual("8e290b2ebc51e1634f124c9f1151f88c", my_manager_id)
+
+    def test_ecv_22(self):
+        """tiene letras"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+1a123456789", "28005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_23(self):
+        """tiene 11 cifras"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+1123456789", "28005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_24(self):
+        """tiene 13 cifras"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "+111123456789", "28005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_25(self):
+        """tiene letras"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "28005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_26(self):
+        """codigo postal bien"""
+        my_manager = OrderManager()
+        my_manager_id = my_manager.register_order \
+            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
+        self.assertEqual("8e290b2ebc51e1634f124c9f1151f88c", my_manager_id)
+
+    def test_ecv_27(self):
+        """6 digitos"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "280105")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_28(self):
+        """4 digitos"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "2805")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_29(self):
+        """tiene letras"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "280a5")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_30(self):
+        """first 2 digit less than 01"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "00005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_30(self):
+        """first 2 digit more than 52"""
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_manager.register_order\
+                ("8421691423220", "PREMIUM", "C/LISBOA, 4,MADRID, SPAIN", "123123456789", "99005")
+        self.assertEqual("Invalid phone_number", cm.exception.message)
+
+    def test_ecv_31(self):
+        """justo 01"""
+        my_manager = OrderManager()
+        my_manager_id = my_manager.register_order \
+            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "01005")
+        self.assertEqual("c6f1b7087cba778077d8011d698c2ab0", my_manager_id)
+
+    def test_ecv_32(self):
+        """justo 52"""
+        my_manager = OrderManager()
+        my_manager_id = my_manager.register_order \
+            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "52005")
+        self.assertEqual("7bd1f4edccea9bb9fd17e5ef1098e150", my_manager_id)
 
 if __name__ == '__main__':
     unittest.main()
