@@ -1,7 +1,7 @@
 """Module """
+import json
 from .order_request import OrderRequest
 from .order_management_exception import OrderManagementException
-
 
 class OrderManager:
     """Class for providing the methods for managing the orders"""
@@ -92,4 +92,27 @@ class OrderManager:
         OrderManager.validate_phone_number(phone_number)
         OrderManager.validate_zip_code(zip_code)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
+
+        new_data = {
+            "OrderID": my_order.order_id,
+            "OrderType": my_order.order_type,
+            "Address": my_order.delivery_address,
+            "Phone number": my_order.phone_number,
+            "ZipCode": my_order.zip_code
+        }
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError as ex:
+            data_list = []
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        data_list.append(new_data)
+        print(data_list)
+        try:
+            with open(file_store, "w", encoding="utf-8", newline="") as file:
+                json.dump(data_list, file, indent=2)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
         return my_order.order_id

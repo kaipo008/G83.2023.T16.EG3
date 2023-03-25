@@ -1,4 +1,6 @@
 """class for testing the regsiter_order method"""
+import json
+import os.path
 import unittest
 from uc3m_logistics import OrderManager
 from uc3m_logistics import OrderManagementException
@@ -170,5 +172,23 @@ class MyTestCase(unittest.TestCase):
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "52005")
         self.assertEqual("7bd1f4edccea9bb9fd17e5ef1098e150", my_manager_id)
 
+    def test_ecv_correct(self):
+        """dummy test"""
+        file_store = JSON_FILES_PATH + "store_order_request.json"
+        if os.path.isfile(file_store):
+            os.remove(file_store)
+
+        my_manager = OrderManager()
+        my_manager_id = my_manager.register_order\
+            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
+        self.assertEqual("8e290b2ebc51e1634f124c9f1151f88c", my_manager_id)
+
+        with (open(file_store, "r", encoding="UTF-8", newline="")) as file:
+            data_list = json.load(file)
+            found = False
+            for item in data_list:
+                if item["_OrderRequest__order_id"] == "8e290b2ebc51e1634f124c9f1151f88c":
+                    found = True
+            self.assertTrue(found)
 if __name__ == '__main__':
     unittest.main()
