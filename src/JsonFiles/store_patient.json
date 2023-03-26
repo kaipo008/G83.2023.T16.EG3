@@ -1,13 +1,7 @@
 [
   {
     "OrderID": "8e290b2ebc51e1634f124c9f1151f88c",
-    "OrderType": "REGULAR",
-    "Address": "C/LISBOA, 4,MADRID, SPAIN",
-    "Phone number": "+34123456789",
-    "ZipCode": "28005"
-  },
-  {
-    "OrderID": "8e290b2ebc51e1634f124c9f1151f88c",
+    "ProductID": "8421691423220",
     "OrderType": "REGULAR",
     "Address": "C/LISBOA, 4,MADRID, SPAIN",
     "Phone number": "+34123456789",

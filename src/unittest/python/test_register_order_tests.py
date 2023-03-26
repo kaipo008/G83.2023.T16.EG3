@@ -1,6 +1,4 @@
 """class for testing the regsiter_order method"""
-import json
-import os.path
 import unittest
 from uc3m_logistics import OrderManager
 from uc3m_logistics import OrderManagementException
@@ -176,6 +174,7 @@ class MyTestCase(unittest.TestCase):
         """dummy test"""
         input_file = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "input_files.json"
         my_manager = OrderManager()
-        my_manager.send_product(input_file)
+        ship = my_manager.send_product(input_file)
+
 if __name__ == '__main__':
     unittest.main()

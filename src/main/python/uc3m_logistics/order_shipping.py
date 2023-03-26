@@ -25,8 +25,8 @@ class OrderShipping():
     def __signature_string(self):
         """Composes the string to be used for generating the key for the date"""
         return "{alg:" + self.__alg +",typ:" + self.__type +",order_id:" + \
-               self.__order_id + ",issuedate:" + self.__issued_at + \
-               ",deliveryday:" + self.__delivery_day + "}"
+               self.__order_id + ",issuedate:" + str(self.__issued_at) + \
+               ",deliveryday:" + str(self.__delivery_day) + "}"
 
     @property
     def product_id( self ):

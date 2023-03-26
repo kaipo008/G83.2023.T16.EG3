@@ -2,6 +2,7 @@
 import json
 import re
 from .order_request import OrderRequest
+from .order_shipping import OrderShipping
 from .order_management_exception import OrderManagementException
 
 class OrderManager:
@@ -96,6 +97,7 @@ class OrderManager:
 
         new_data = {
             "OrderID": my_order.order_id,
+            "ProductID": my_order.product_id,
             "OrderType": my_order.order_type,
             "Address": my_order.delivery_address,
             "Phone number": my_order.phone_number,
@@ -119,7 +121,7 @@ class OrderManager:
         return my_order.order_id
 
     @staticmethod
-    def send_product(input_file):
+    def validate_input_file(input_file):
         if input_file[-5:] != ".json":
             raise OrderManagementException("Input file not JSON")
         try:
@@ -127,7 +129,6 @@ class OrderManager:
                 input_list = json.load(file)
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
-        print(input_list)
         if list(input_list.keys()) != ['OrderID', 'ContactEmail']:
             raise OrderManagementException("Invalid JSON format")
         regex = r'^{\s*"OrderID"\s*:\s*"[0-9a-f]{32}",\s*"ContactEmail"\s*:\s*"[a-zA-Z0-9._%+-' \
@@ -135,6 +136,11 @@ class OrderManager:
         coincidencia = re.match(regex, str(input_list).replace("'", '"'))
         if coincidencia is None:
             raise OrderManagementException("JSON has not the expected structure")
+        return input_list
+
+    @staticmethod
+    def send_product(input_file):
+        input_list = OrderManager.validate_input_file(input_file)
         file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
         with open(file_store, "r", encoding="utf-8", newline="") as file:
             data_list = json.load(file)
@@ -142,6 +148,9 @@ class OrderManager:
         for i in data_list:
             if i["OrderID"] == input_list["OrderID"]:
                 found = True
+                order = i
                 break
         if not found:
             raise OrderManagementException("Order not in stored orders")
+        ship = OrderShipping(order["ProductID"], order["OrderID"], input_list["ContactEmail"], order["OrderType"])
+        return ship.tracking_code
