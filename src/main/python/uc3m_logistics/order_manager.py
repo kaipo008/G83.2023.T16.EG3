@@ -1,5 +1,6 @@
 """Module """
 import json
+import re
 from .order_request import OrderRequest
 from .order_management_exception import OrderManagementException
 
@@ -116,3 +117,31 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return my_order.order_id
+
+    @staticmethod
+    def send_product(input_file):
+        if input_file[-5:] != ".json":
+            raise OrderManagementException("Input file not JSON")
+        try:
+            with open(input_file, "r", encoding="utf-8", newline="") as file:
+                input_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
+        print(input_list)
+        if list(input_list.keys()) != ['OrderID', 'ContactEmail']:
+            raise OrderManagementException("Invalid JSON format")
+        regex = r'^{\s*"OrderID"\s*:\s*"[0-9a-f]{32}",\s*"ContactEmail"\s*:\s*"[a-zA-Z0-9._%+-' \
+                r']+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"\s*}$'
+        coincidencia = re.match(regex, str(input_list).replace("'", '"'))
+        if coincidencia is None:
+            raise OrderManagementException("JSON has not the expected structure")
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
+        with open(file_store, "r", encoding="utf-8", newline="") as file:
+            data_list = json.load(file)
+        found = False
+        for i in data_list:
+            if i["OrderID"] == input_list["OrderID"]:
+                found = True
+                break
+        if not found:
+            raise OrderManagementException("Order not in stored orders")
