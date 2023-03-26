@@ -161,7 +161,7 @@ class OrderManager:
             "OrderID": ship.order_id,
             "DeliveryEmail": ship.email,
             "IssuedAt": ship.issued_at,
-            "DeliveryDate": ship.delivery_day,
+            "DeliveryDay": ship.delivery_day,
             }
         data_list.append(new_data)
         try:
@@ -201,3 +201,39 @@ class OrderManager:
                 exist = True
                 break
         return exist
+
+    @staticmethod
+    def deliver_product(tracking_number):
+        file_get = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
+                     "store_shipping.json"
+        with open(file_get, "r", encoding="utf-8", newline="") as file:
+            data_list = json.load(file)
+        found = False
+        for i in data_list:
+            if i["TrackingCode"] == tracking_number:
+                order = i
+                found = True
+                break
+        if not found:
+            raise OrderManagementException("Tracking Code not Registered")
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
+                     "delivery_files.json"
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                data_list2 = json.load(file)
+        except FileNotFoundError:
+            data_list2 = []
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        new_data = {
+            "TrackingCode": tracking_number,
+            "DeliveryDay": order["DeliveryDay"]
+        }
+        data_list2.append(new_data)
+        try:
+            with open(file_store, "w", encoding="utf-8", newline="") as file:
+                json.dump(data_list2, file, indent=2)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
+
+

@@ -178,5 +178,9 @@ class MyTestCase(unittest.TestCase):
         my_manager = OrderManager()
         ship = my_manager.send_product(input_file)
 
+    def test_entrega(self):
+        my_manager = OrderManager()
+        delivery = my_manager.deliver_product("e8274da0545e47f3668477fea61f66ef0301f0b6a549c463bbdfff484901d6f1")
+
 if __name__ == '__main__':
     unittest.main()
