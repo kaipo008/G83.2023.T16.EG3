@@ -207,8 +207,8 @@ class OrderManager:
         if not isinstance(tracking_number, str):
             raise OrderManagementException("La cadena de entrada no contiene un "
                                            "código de seguimiento que pueda procesarse")
-        regex = r'^{[0-9A-F]{32}]}$'
-        coincidencia = re.match(regex, str(tracking_number).replace("'", '"'))
+        regex = r'^[a-fA-F0-9]{64}$'
+        coincidencia = re.match(regex, tracking_number)
         if coincidencia is None:
             raise OrderManagementException("Tracking number is invalid")
 
