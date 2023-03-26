@@ -5,6 +5,7 @@ from .order_request import OrderRequest
 from .order_shipping import OrderShipping
 from .order_management_exception import OrderManagementException
 
+
 class OrderManager:
     """Class for providing the methods for managing the orders"""
     def __init__(self):
@@ -12,9 +13,8 @@ class OrderManager:
 
     @staticmethod
     def validate_ean13(ean13_code):
-        #RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
-        #OR FALSE IN OTHER CASE
-        #CE_NV_2
+        """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13,
+        OR FALSE IN OTHER CASE CE_NV_2"""
         if not ean13_code.isdigit():
             raise OrderManagementException("Invalid EAN13 code string")
         #CE_NV_3
@@ -103,11 +103,12 @@ class OrderManager:
             "Phone number": my_order.phone_number,
             "ZipCode": my_order.zip_code
         }
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
+                     "store_patient.json"
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
-        except FileNotFoundError as ex:
+        except FileNotFoundError:
             data_list = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
@@ -122,6 +123,7 @@ class OrderManager:
 
     @staticmethod
     def validate_input_file(input_file):
+        """Valida si el Json recibido es correcto"""
         if input_file[-5:] != ".json":
             raise OrderManagementException("Input file not JSON")
         try:
@@ -140,8 +142,12 @@ class OrderManager:
 
     @staticmethod
     def send_product(input_file):
+        """comprueba si lo en viado cumple con el estandar,
+         luego mira si esta dentro del almacen el codigo SHA256 recibido
+         y si esta devuelve el fichero pedido"""
         input_list = OrderManager.validate_input_file(input_file)
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" +\
+                     "store_patient.json"
         with open(file_store, "r", encoding="utf-8", newline="") as file:
             data_list = json.load(file)
         found = False
@@ -152,5 +158,6 @@ class OrderManager:
                 break
         if not found:
             raise OrderManagementException("Order not in stored orders")
-        ship = OrderShipping(order["ProductID"], order["OrderID"], input_list["ContactEmail"], order["OrderType"])
+        ship = OrderShipping(order["ProductID"], order["OrderID"], input_list["ContactEmail"],
+                             order["OrderType"])
         return ship.tracking_code
