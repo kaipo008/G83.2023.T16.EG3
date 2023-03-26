@@ -218,8 +218,13 @@ class OrderManager:
         OrderManager.comprobar_tracking_number(tracking_number)
         file_get = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
                      "store_shipping.json"
-        with open(file_get, "r", encoding="utf-8", newline="") as file:
-            data_list = json.load(file)
+        try:
+            with open(file_get, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError:
+            raise OrderManagementException("FileNotFound")
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
         found = False
         for i in data_list:
             if i["TrackingCode"] == tracking_number:
