@@ -95,14 +95,6 @@ class OrderManager:
         OrderManager.validate_zip_code(zip_code)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
 
-        new_data = {
-            "OrderID": my_order.order_id,
-            "ProductID": my_order.product_id,
-            "OrderType": my_order.order_type,
-            "Address": my_order.delivery_address,
-            "Phone number": my_order.phone_number,
-            "ZipCode": my_order.zip_code
-        }
         file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
@@ -111,8 +103,17 @@ class OrderManager:
             data_list = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
-        data_list.append(new_data)
-        print(data_list)
+        exist = OrderManager.does_it_exist("OrderID", my_order.order_id, data_list)
+        new_data = {
+            "OrderID": my_order.order_id,
+            "ProductID": my_order.product_id,
+            "OrderType": my_order.order_type,
+            "Address": my_order.delivery_address,
+            "Phone number": my_order.phone_number,
+            "ZipCode": my_order.zip_code
+        }
+        if not exist:
+            data_list.append(new_data)
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
@@ -139,6 +140,28 @@ class OrderManager:
         return input_list
 
     @staticmethod
+    def store_shipping(tracking_code, delivery_day):
+        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_shipping.json"
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError as ex:
+            data_list = []
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        new_data = {
+            "TrackingCode": tracking_code,
+            "DeliveryDate": delivery_day
+            }
+        data_list.append(new_data)
+        try:
+            with open(file_store, "w", encoding="utf-8", newline="") as file:
+                json.dump(data_list, file, indent=2)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
+
+
+    @staticmethod
     def send_product(input_file):
         input_list = OrderManager.validate_input_file(input_file)
         file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "store_patient.json"
@@ -153,4 +176,14 @@ class OrderManager:
         if not found:
             raise OrderManagementException("Order not in stored orders")
         ship = OrderShipping(order["ProductID"], order["OrderID"], input_list["ContactEmail"], order["OrderType"])
+        OrderManager.store_shipping(ship.tracking_code, ship.delivery_day)
         return ship.tracking_code
+
+    @staticmethod
+    def does_it_exist(primary_key, primary_key_value, input_list: list):
+        exist = False
+        for i in input_list:
+            if i[primary_key] == primary_key_value:
+                exist = True
+                break
+        return exist
