@@ -142,7 +142,7 @@ class OrderManager:
         return input_list
 
     @staticmethod
-    def store_shipping(tracking_code, delivery_day):
+    def store_shipping(ship):
         """valida"""
         file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
                      "store_shipping.json"
@@ -154,8 +154,14 @@ class OrderManager:
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
         new_data = {
-            "TrackingCode": tracking_code,
-            "DeliveryDate": delivery_day
+            "TrackingCode": ship.tracking_code,
+            "Alg": "SHA-256",
+            "Type": "DS",
+            "ProductID": ship.product_id,
+            "OrderID": ship.order_id,
+            "DeliveryEmail": ship.email,
+            "IssuedAt": ship.issued_at,
+            "DeliveryDate": ship.delivery_day,
             }
         data_list.append(new_data)
         try:
@@ -183,7 +189,7 @@ class OrderManager:
             raise OrderManagementException("Order not in stored orders")
         ship = OrderShipping(order["ProductID"], order["OrderID"],
                              input_list["ContactEmail"], order["OrderType"])
-        OrderManager.store_shipping(ship.tracking_code, ship.delivery_day)
+        OrderManager.store_shipping(ship)
         return ship.tracking_code
 
     @staticmethod
