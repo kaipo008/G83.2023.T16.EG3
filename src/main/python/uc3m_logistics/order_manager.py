@@ -17,7 +17,7 @@ class OrderManager:
         OR FALSE IN OTHER CASE CE_NV_2"""
         if not ean13_code.isdigit():
             raise OrderManagementException("Invalid EAN13 code string")
-        #CE_NV_3
+        # CE_NV_3
         if not isinstance(ean13_code, str):
             raise OrderManagementException("Invalid EAN13 code string")
         if len(ean13_code) != 13:
@@ -170,7 +170,6 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
 
-
     @staticmethod
     def send_product(input_file):
         """valida"""
@@ -203,7 +202,20 @@ class OrderManager:
         return exist
 
     @staticmethod
+    def comprobar_tracking_number(tracking_number):
+        """algo"""
+        if not isinstance(tracking_number, str):
+            raise OrderManagementException("La cadena de entrada no contiene un "
+                                           "código de seguimiento que pueda procesarse")
+        regex = r'^{[0-9A-F]{32}]}$'
+        coincidencia = re.match(regex, str(tracking_number).replace("'", '"'))
+        if coincidencia is None:
+            raise OrderManagementException("Tracking number is invalid")
+
+    @staticmethod
     def deliver_product(tracking_number):
+        """algo0"""
+        OrderManager.comprobar_tracking_number(tracking_number)
         file_get = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
                      "store_shipping.json"
         with open(file_get, "r", encoding="utf-8", newline="") as file:
@@ -235,5 +247,3 @@ class OrderManager:
                 json.dump(data_list2, file, indent=2)
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
-
-
