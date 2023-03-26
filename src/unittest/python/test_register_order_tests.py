@@ -173,7 +173,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_ecv_correct(self):
         """dummy test"""
-        input_file = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + "input_files.json"
+        input_file = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
+                     "input_files.json"
         my_manager = OrderManager()
         ship = my_manager.send_product(input_file)
 
