@@ -153,6 +153,7 @@ class OrderManager:
             data_list = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        exist = OrderManager.does_it_exist("TrackingCode", ship.tracking_code, data_list)
         new_data = {
             "TrackingCode": ship.tracking_code,
             "Alg": "SHA-256",
@@ -163,7 +164,8 @@ class OrderManager:
             "IssuedAt": ship.issued_at,
             "DeliveryDay": ship.delivery_day,
             }
-        data_list.append(new_data)
+        if not exist:
+            data_list.append(new_data)
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
@@ -242,11 +244,13 @@ class OrderManager:
             data_list2 = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        exist = OrderManager.does_it_exist("TrackingCode", tracking_number, data_list2)
         new_data = {
             "TrackingCode": tracking_number,
             "DeliveryDay": order["DeliveryDay"]
         }
-        data_list2.append(new_data)
+        if not exist:
+            data_list2.append(new_data)
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list2, file, indent=2)
