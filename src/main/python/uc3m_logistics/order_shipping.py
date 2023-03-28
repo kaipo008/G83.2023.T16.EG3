@@ -2,7 +2,6 @@
 from datetime import datetime
 import hashlib
 
-
 class OrderShipping:
     """Class representing the information required for shipping of an order"""
 

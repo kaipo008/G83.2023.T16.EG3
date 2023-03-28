@@ -1,6 +1,7 @@
 """Module """
 import json
 import re
+from datetime import datetime
 from .order_request import OrderRequest
 from .order_shipping import OrderShipping
 from .order_management_exception import OrderManagementException
@@ -215,6 +216,16 @@ class OrderManager:
             raise OrderManagementException("Tracking number is invalid")
 
     @staticmethod
+    def comprobar_fecha_entrega(fecha) -> bool:
+        """Pylint bruh"""
+        result = False
+        fecha_actual = datetime.timestamp(datetime.utcnow())
+        intervalo_entrega = fecha_actual + 24*60*60
+        if fecha <= fecha_actual <= intervalo_entrega:
+            result = True
+        return result
+
+    @staticmethod
     def deliver_product(tracking_number):
         """algo0"""
         OrderManager.comprobar_tracking_number(tracking_number)
@@ -235,6 +246,9 @@ class OrderManager:
                 break
         if not found:
             raise OrderManagementException("Tracking Code not Registered")
+        fecha = OrderManager.comprobar_fecha_entrega(order["DeliveryDay"])
+        if not fecha:
+            raise OrderManagementException("Fecha no corresponde a la fecha de entrga")
         file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
                      "delivery_files.json"
         try:
