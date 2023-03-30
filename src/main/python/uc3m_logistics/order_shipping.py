@@ -13,7 +13,7 @@ class OrderShipping:
         self.__delivery_email = delivery_email
         justnow = datetime.utcnow()
         self.__issued_at = datetime.timestamp(justnow)
-        if order_type == "Regular":
+        if order_type.upper() == "REGULAR":
             delivery_days = 7
         else:
             delivery_days = 1

@@ -12,7 +12,6 @@ class OrderManager:
     """Class for providing the methods for managing the orders"""
     def __init__(self):
         self.path = os.path.join(os.path.dirname(__file__),"../../../JsonFiles/")
-        pass
 
     @staticmethod
     def validate_ean13(ean13_code):
@@ -195,7 +194,7 @@ class OrderManager:
             raise OrderManagementException("Order not in stored orders")
         ship = OrderShipping(order["ProductID"], order["OrderID"],
                              input_list["ContactEmail"], order["OrderType"])
-        OrderManager.store_shipping(ship)
+        self.store_shipping(ship)
         return ship.tracking_code
 
     @staticmethod
@@ -212,8 +211,7 @@ class OrderManager:
     def comprobar_tracking_number(tracking_number):
         """algo"""
         if not isinstance(tracking_number, str):
-            raise OrderManagementException("La cadena de entrada no contiene un "
-                                           "código de seguimiento que pueda procesarse")
+            raise OrderManagementException("Tracking code cannot be procesed")
         regex = r'^[a-fA-F0-9]{64}$'
         coincidencia = re.match(regex, tracking_number)
         if coincidencia is None:
@@ -224,7 +222,7 @@ class OrderManager:
         """Pylint bruh"""
         result = False
         fecha_actual = datetime.timestamp(datetime.utcnow())
-        intervalo_entrega = fecha_actual + 24*60*60
+        intervalo_entrega = fecha + 24*60*60
         if fecha <= fecha_actual <= intervalo_entrega:
             result = True
         return result
