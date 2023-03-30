@@ -88,7 +88,8 @@ class OrderManager:
 
     @staticmethod
     def register_order(product_id, order_type, address, phone_number, zip_code):
-        """Devuelve el id del producto"""
+        """Comprobamos que los campos son válidos. Añadimos los datos al json si no existen ya.
+        Retornamos el order_id."""
         OrderManager.validate_ean13(product_id)
         OrderManager.validate_order_type(order_type)
         OrderManager.validate_address(address)
@@ -105,6 +106,7 @@ class OrderManager:
             data_list = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
         exist = OrderManager.does_it_exist("OrderID", my_order.order_id, data_list)
         new_data = {
             "OrderID": my_order.order_id,
@@ -116,6 +118,7 @@ class OrderManager:
         }
         if not exist:
             data_list.append(new_data)
+
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
@@ -125,7 +128,10 @@ class OrderManager:
 
     @staticmethod
     def validate_input_file(input_file):
-        """valida"""
+        """Valida si el json es válido y sus erores. En concreto:
+        Si el archivo que queremos abrir es un json, si tiene el diccionario la
+        estructura necesaria. Comprobamos con regex que el diccionario no tiene
+        valores no válidos"""
         if input_file[-5:] != ".json":
             raise OrderManagementException("Input file not JSON")
         try:
