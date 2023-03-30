@@ -195,7 +195,7 @@ class OrderManager:
             raise OrderManagementException("Order not in stored orders")
         ship = OrderShipping(order["ProductID"], order["OrderID"],
                              input_list["ContactEmail"], order["OrderType"])
-        OrderManager.store_shipping(ship)
+        OrderManager.store_shipping(self,ship)
         return ship.tracking_code
 
     @staticmethod
