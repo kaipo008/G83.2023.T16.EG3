@@ -173,9 +173,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_ecv_correct(self):
         """dummy test"""
-        input_file = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "input_files.json"
         my_manager = OrderManager()
+        input_file = my_manager.path + "input_files.json"
         ship = my_manager.send_product(input_file)
 
     @freeze_time("2023-03-15")
