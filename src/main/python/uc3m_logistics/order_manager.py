@@ -1,6 +1,7 @@
 """Module """
 import json
 import re
+import os
 from datetime import datetime
 from .order_request import OrderRequest
 from .order_shipping import OrderShipping
@@ -10,6 +11,7 @@ from .order_management_exception import OrderManagementException
 class OrderManager:
     """Class for providing the methods for managing the orders"""
     def __init__(self):
+        self.path = os.path.join(os.path.dirname(__file__),"../../../JsonFiles/")
         pass
 
     @staticmethod
@@ -86,8 +88,8 @@ class OrderManager:
             raise OrderManagementException("Invalid zip_code")
         return True
 
-    @staticmethod
-    def register_order(product_id, order_type, address, phone_number, zip_code):
+
+    def register_order(self, product_id, order_type, address, phone_number, zip_code):
         """Comprobamos que los campos son válidos. Añadimos los datos al json si no existen ya.
         Retornamos el order_id."""
         OrderManager.validate_ean13(product_id)
@@ -97,8 +99,7 @@ class OrderManager:
         OrderManager.validate_zip_code(zip_code)
         my_order = OrderRequest(product_id, order_type, address, phone_number, zip_code)
 
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "store_patient.json"
+        file_store = self.path + "store_patient.json"
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
@@ -148,11 +149,10 @@ class OrderManager:
             raise OrderManagementException("JSON has not the expected structure")
         return input_list
 
-    @staticmethod
-    def store_shipping(ship):
+
+    def store_shipping(self, ship):
         """valida"""
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "store_shipping.json"
+        file_store = self.path + "store_shipping.json"
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
@@ -179,12 +179,10 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
 
-    @staticmethod
-    def send_product(input_file):
+    def send_product(self, input_file):
         """valida"""
         input_list = OrderManager.validate_input_file(input_file)
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "store_patient.json"
+        file_store = self.path + "store_patient.json"
         with open(file_store, "r", encoding="utf-8", newline="") as file:
             data_list = json.load(file)
         found = False
@@ -231,12 +229,10 @@ class OrderManager:
             result = True
         return result
 
-    @staticmethod
-    def deliver_product(tracking_number):
+    def deliver_product(self, tracking_number):
         """algo0"""
         OrderManager.comprobar_tracking_number(tracking_number)
-        file_get = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "store_shipping.json"
+        file_get = self.path + "store_shipping.json"
         try:
             with open(file_get, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
@@ -255,8 +251,7 @@ class OrderManager:
         fecha = OrderManager.comprobar_fecha_entrega(order["DeliveryDay"])
         if not fecha:
             raise OrderManagementException("Fecha no corresponde a la fecha de entrga")
-        file_store = "/Users/crown/Desktop/UNI/2ºCurso/G83.2023.T16.EG3/src/JsonFiles/" + \
-                     "delivery_files.json"
+        file_store = self.path + "delivery_files.json"
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
                 data_list2 = json.load(file)
