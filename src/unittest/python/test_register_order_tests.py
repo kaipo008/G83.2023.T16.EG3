@@ -175,12 +175,12 @@ class MyTestCase(unittest.TestCase):
         """dummy test"""
         my_manager = OrderManager()
         input_file = my_manager.path + "input_files.json"
-        ship = my_manager.send_product(input_file)
+        my_manager.send_product(input_file)
 
     @freeze_time("2023-03-15")
     def test_entrega(self):
         my_manager = OrderManager()
-        delivery = my_manager.deliver_product\
+        my_manager.deliver_product\
             ("82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
 
 
