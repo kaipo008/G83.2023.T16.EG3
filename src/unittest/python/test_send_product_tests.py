@@ -13,6 +13,13 @@ class MyTestCase(unittest.TestCase):
         """hace el setup"""
         self.delivery_file = os.path.join(
             os.path.dirname(__file__), "../../JsonFiles/FR2Json") + "store_shipping.json"
+        store_patient = os.path.join(
+            os.path.dirname(__file__), "../../JsonFiles/") + "store_patient.json"
+        if os.path.isfile(store_patient):
+            os.remove(store_patient)
+        my_manager = OrderManager()
+        my_manager.register_order(
+            "8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
 
     @staticmethod
     def test_ecv_1():
@@ -113,6 +120,38 @@ class MyTestCase(unittest.TestCase):
         """nombre de correo no cumple con la regex establecida"""
         my_manager = OrderManager()
         input_file = my_manager.path + "FR2Json/prueba12.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON has not the expected structure", prueba.exception.message)
+
+    def test_ecv_13(self):
+        """duplico el campo 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba13.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON Decode Error - Wrong JSON Format", prueba.exception.message)
+
+    def test_ecv_14(self):
+        """OrderID esta borrado"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba14.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("Invalid JSON format", prueba.exception.message)
+
+    def test_ecv_15(self):
+        """duplico etiqueta 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba15.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON Decode Error - Wrong JSON Format", prueba.exception.message)
+
+    def test_ecv_16(self):
+        """duplico etiqueta 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba16.json"
         with self.assertRaises(OrderManagementException) as prueba:
             my_manager.send_product(input_file)
         self.assertEqual("JSON has not the expected structure", prueba.exception.message)
