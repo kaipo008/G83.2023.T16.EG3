@@ -6,13 +6,15 @@ from uc3m_logistics import OrderManager
 from uc3m_logistics import OrderManagementException
 from freezegun import freeze_time
 
-@freeze_time("2023-03-08")
+@freeze_time("2023-03-15")
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.delivery_file = os.path.join(os.path.dirname(__file__),"../../JsonFiles/") + \
-                     "delivery_files.json"
-        store_patient = os.path.join(os.path.dirname(__file__), "../../JsonFiles/") + \
-                        "store_patient.json"
+        """Borramos los ficheros y ejecutamos los 2 primeros test de los anteriores test
+        para crear el entorno y asegurarnos que este fichero es independiente de la ejecución de
+        los anteriores test"""
+        self._path = os.path.join(os.path.dirname(__file__),"../../JsonFiles/")
+        self.delivery_file = self._path + "delivery_files.json"
+        store_patient = self._path + "store_patient.json"
         if os.path.isfile(store_patient):
             os.remove(store_patient)
         my_manager = OrderManager()
@@ -20,7 +22,6 @@ class MyTestCase(unittest.TestCase):
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
 
 
-    @freeze_time("2023-03-15")
     def test_sp_01(self):
         """Todos los parámetros correctos. Fecha regular, + 7 días"""
         my_manager = OrderManager()
@@ -41,6 +42,17 @@ class MyTestCase(unittest.TestCase):
                 "e8274da0545e47f3668477fea61f66ef0301f0b6a549c463bbdfff484901d6f2")
         self.assertEqual("Tracking Code not Registered", prueba.exception.message)
 
+    def test_sp_03(self):
+        """El fichero no se encuentra"""
+        store_shipping = self._path + "store_shipping"
+        if os.path.isfile(store_shipping):
+            os.remove(store_shipping)
+        my_manager = OrderManager()
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.deliver_product(
+                "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
+        self.assertEqual("FileNotFound", prueba.exception.message)
+
     def test_sp_05(self):
         """El tracking code no tiene formato SHA-256"""
         my_manager = OrderManager()
@@ -57,7 +69,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual("Tracking code cannot be procesed", prueba.exception.message)
 
     @freeze_time("2023-03-13")
-    def test_sp_06(self):
+    def test_sp_07(self):
         """La fecha no entra en el intervalo de entrega. Llega 2 días antes"""
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as prueba:
