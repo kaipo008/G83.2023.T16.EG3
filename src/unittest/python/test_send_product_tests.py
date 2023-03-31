@@ -13,6 +13,13 @@ class MyTestCase(unittest.TestCase):
         """hace el setup"""
         self.delivery_file = os.path.join(
             os.path.dirname(__file__), "../../JsonFiles/FR2Json") + "store_shipping.json"
+        store_patient = os.path.join(
+            os.path.dirname(__file__), "../../JsonFiles/") + "store_patient.json"
+        if os.path.isfile(store_patient):
+            os.remove(store_patient)
+        my_manager = OrderManager()
+        my_manager.register_order(
+            "8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
 
     @staticmethod
     def test_ecv_1():
