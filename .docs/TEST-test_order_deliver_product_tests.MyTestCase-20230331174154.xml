@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_order_deliver_product_tests.MyTestCase-20230331174154" tests="7" file="test_order_deliver_product_tests.py" time="0.062" timestamp="2023-03-31T17:41:54" failures="0" errors="0" skipped="0">
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_01" time="0.016" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_02" time="0.016" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_03" time="0.016" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_04" time="0.000" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_05" time="0.000" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_06" time="0.000" timestamp="2023-03-31T17:41:54"/>
+	<testcase classname="test_order_deliver_product_tests.MyTestCase" name="test_sp_07" time="0.016" timestamp="2023-03-31T17:41:54"/>
+</testsuite>
