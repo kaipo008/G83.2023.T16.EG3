@@ -1,5 +1,6 @@
 """class for testing the regsiter_order method"""
 import unittest
+import os
 from uc3m_logistics import OrderManager
 from uc3m_logistics import OrderManagementException
 from freezegun import freeze_time
@@ -8,6 +9,13 @@ from freezegun import freeze_time
 @freeze_time("2023-03-08")
 class MyTestCase(unittest.TestCase):
     """class for testing the register_order method"""
+    def test_remove_store_patient(self):
+        """Removes the file"""
+        store_patient = os.path.join(os.path.dirname(__file__),"../../JsonFiles/") + \
+                     "store_patient.json"
+        if os.path.isfile(store_patient):
+            os.remove(store_patient)
+
     def test_ecv_1(self):
         """dummy test"""
         my_manager = OrderManager()
