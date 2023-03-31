@@ -12,8 +12,8 @@ class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         """hace el setup"""
         self.shipping_file = os.path.join(
-            os.path.dirname(__file__), "../../JsonFiles/") + \
-                     "store_shipping.json"
+            os.path.dirname(
+                __file__), "../../JsonFiles/") + "store_shipping.json"
         store_patient = os.path.join(
             os.path.dirname(__file__), "../../JsonFiles/") + "store_patient.json"
         if os.path.isfile(store_patient):
@@ -27,8 +27,8 @@ class MyTestCase(unittest.TestCase):
         if os.path.isfile(self.shipping_file):
             os.remove(self.shipping_file)
 
-
-    def test_ecv_1(self):
+    @staticmethod
+    def test_ecv_1():
         """prueba correcta que guarda la informacion de envio"""
         my_manager = OrderManager()
         input_file = my_manager.path + "FR2Json/input_files.json"
@@ -161,6 +161,7 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(OrderManagementException) as prueba:
             my_manager.send_product(input_file)
         self.assertEqual("JSON has not the expected structure", prueba.exception.message)
+
 
 if __name__ == '__main__':
     unittest.main()

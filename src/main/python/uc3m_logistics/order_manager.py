@@ -1,4 +1,5 @@
 """Module """
+#pylint: disable=too-many-arguments
 import json
 import re
 import os

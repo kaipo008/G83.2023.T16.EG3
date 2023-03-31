@@ -6,6 +6,7 @@ from uc3m_logistics import OrderManager
 from uc3m_logistics import OrderManagementException
 from freezegun import freeze_time
 
+
 @freeze_time("2023-03-15")
 class MyTestCase(unittest.TestCase):
     """class for testing the deliver_product method"""
@@ -14,20 +15,19 @@ class MyTestCase(unittest.TestCase):
         """Borramos los ficheros y ejecutamos los 2 primeros test de los anteriores test
         para crear el entorno y asegurarnos que este fichero es independiente de la ejecución de
         los anteriores test"""
-        self._path = os.path.join(os.path.dirname(__file__),"../../JsonFiles/")
+        self._path = os.path.join(os.path.dirname(__file__), "../../JsonFiles/")
         self.shipping_file = self._path + "store_shipping.json"
         self.delivery_file = self._path + "delivery_files.json"
         store_patient = self._path + "store_patient.json"
         if os.path.isfile(store_patient):
             os.remove(store_patient)
         my_manager = OrderManager()
-        my_manager.register_order \
-            ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
+        my_manager.register_order(
+            "8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
         if os.path.isfile(self.shipping_file):
             os.remove(self.shipping_file)
         input_file = my_manager.path + "FR2Json/input_files.json"
         my_manager.send_product(input_file)
-
 
     def test_sp_01(self):
         """Todos los parámetros correctos. Fecha regular, + 7 días"""
@@ -36,9 +36,9 @@ class MyTestCase(unittest.TestCase):
             "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
         with open(self.delivery_file, "r", encoding="utf-8", newline="") as file:
             data_list = json.load(file)
-        exist = OrderManager.does_it_exist("TrackingCode",
-                "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019",
-                data_list)
+        exist = OrderManager.does_it_exist(
+            "TrackingCode",
+            "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019", data_list)
         self.assertTrue(exist)
 
     def test_sp_02(self):
@@ -87,6 +87,7 @@ class MyTestCase(unittest.TestCase):
             my_manager.deliver_product(
                 "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
         self.assertEqual("Fecha no corresponde a la fecha de entrga", prueba.exception.message)
+
 
 if __name__ == '__main__':
     unittest.main()

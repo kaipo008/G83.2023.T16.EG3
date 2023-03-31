@@ -1,4 +1,5 @@
 """MODULE: access_request. Contains the access request class"""
+#pylint: disable=too-many-arguments
 import hashlib
 import json
 from datetime import datetime
