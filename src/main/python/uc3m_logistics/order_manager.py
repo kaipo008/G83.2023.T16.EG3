@@ -137,8 +137,12 @@ class OrderManager:
         try:
             with open(input_file, "r", encoding="utf-8", newline="") as file:
                 input_list = json.load(file)
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
+        if not isinstance(input_list,dict):
+            raise OrderManagementException("Invalid order format")
         if list(input_list.keys()) != ['OrderID', 'ContactEmail']:
             raise OrderManagementException("Invalid JSON format")
         regex = r'^{\s*"OrderID"\s*:\s*"[0-9a-f]{32}",\s*"ContactEmail"\s*:\s*"[a-zA-Z0-9._%+-' \
