@@ -9,7 +9,7 @@ from freezegun import freeze_time
 @freeze_time("2023-03-08")
 class MyTestCase(unittest.TestCase):
     """class for testing the register_order method"""
-    def test_remove_store_patient(self):
+    def remove_store_patient(self):
         """Removes the file"""
         store_patient = os.path.join(os.path.dirname(__file__),"../../JsonFiles/") + \
                      "store_patient.json"
@@ -179,17 +179,6 @@ class MyTestCase(unittest.TestCase):
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "52005")
         self.assertEqual("7bd1f4edccea9bb9fd17e5ef1098e150", my_manager_id)
 
-    def test_ecv_correct(self):
-        """dummy test"""
-        my_manager = OrderManager()
-        input_file = my_manager.path + "input_files.json"
-        my_manager.send_product(input_file)
-
-    @freeze_time("2023-03-15")
-    def test_entrega(self):
-        my_manager = OrderManager()
-        my_manager.deliver_product\
-            ("82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
 
 
 if __name__ == '__main__':

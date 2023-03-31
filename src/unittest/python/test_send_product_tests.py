@@ -8,11 +8,12 @@ from freezegun import freeze_time
 
 @freeze_time("2023-03-08")
 class MyTestCase(unittest.TestCase):
-    """prueba la funcion 2"""
+    """class for testing the send_product method"""
     def setUp(self) -> None:
         """hace el setup"""
-        self.delivery_file = os.path.join(
-            os.path.dirname(__file__), "../../JsonFiles/FR2Json") + "store_shipping.json"
+        self.shipping_file = os.path.join(
+            os.path.dirname(__file__), "../../JsonFiles/") + \
+                     "store_shipping.json"
         store_patient = os.path.join(
             os.path.dirname(__file__), "../../JsonFiles/") + "store_patient.json"
         if os.path.isfile(store_patient):
@@ -21,11 +22,16 @@ class MyTestCase(unittest.TestCase):
         my_manager.register_order(
             "8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
 
-    @staticmethod
-    def test_ecv_1():
+    def remove_store_patient(self):
+        """Removes the file"""
+        if os.path.isfile(self.shipping_file):
+            os.remove(self.shipping_file)
+
+
+    def test_ecv_1(self):
         """prueba correcta que guarda la informacion de envio"""
         my_manager = OrderManager()
-        input_file = my_manager.path + "input_files.json"
+        input_file = my_manager.path + "FR2Json/input_files.json"
         my_manager.send_product(input_file)
 
     def test_ecv_2(self):
@@ -155,3 +161,6 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(OrderManagementException) as prueba:
             my_manager.send_product(input_file)
         self.assertEqual("JSON has not the expected structure", prueba.exception.message)
+
+if __name__ == '__main__':
+    unittest.main()

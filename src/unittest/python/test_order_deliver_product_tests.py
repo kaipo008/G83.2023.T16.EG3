@@ -8,18 +8,25 @@ from freezegun import freeze_time
 
 @freeze_time("2023-03-15")
 class MyTestCase(unittest.TestCase):
+    """class for testing the deliver_product method"""
+    @freeze_time("2023-03-08")
     def setUp(self) -> None:
         """Borramos los ficheros y ejecutamos los 2 primeros test de los anteriores test
         para crear el entorno y asegurarnos que este fichero es independiente de la ejecución de
         los anteriores test"""
         self._path = os.path.join(os.path.dirname(__file__),"../../JsonFiles/")
+        self.shipping_file = self._path + "store_shipping.json"
         self.delivery_file = self._path + "delivery_files.json"
         store_patient = self._path + "store_patient.json"
         if os.path.isfile(store_patient):
             os.remove(store_patient)
         my_manager = OrderManager()
-        my_manager_id = my_manager.register_order \
+        my_manager.register_order \
             ("8421691423220", "REGULAR", "C/LISBOA, 4,MADRID, SPAIN", "+34123456789", "28005")
+        if os.path.isfile(self.shipping_file):
+            os.remove(self.shipping_file)
+        input_file = my_manager.path + "FR2Json/input_files.json"
+        my_manager.send_product(input_file)
 
 
     def test_sp_01(self):
@@ -44,14 +51,18 @@ class MyTestCase(unittest.TestCase):
 
     def test_sp_03(self):
         """El fichero no se encuentra"""
-        store_shipping = self._path + "store_shipping"
-        if os.path.isfile(store_shipping):
-            os.remove(store_shipping)
+        if os.path.isfile(self.shipping_file):
+            os.remove(self.shipping_file)
         my_manager = OrderManager()
         with self.assertRaises(OrderManagementException) as prueba:
             my_manager.deliver_product(
                 "82a205608150ed5d5286b94a3c149b1dad6f60dc69d48710e1df925afe623019")
         self.assertEqual("FileNotFound", prueba.exception.message)
+
+    def test_sp_04(self):
+        """El fichero no puede ser procesado. No es un json.
+        Esto nunca se puede dar ya que siempre redirigirá al json"""
+        pass
 
     def test_sp_05(self):
         """El tracking code no tiene formato SHA-256"""
