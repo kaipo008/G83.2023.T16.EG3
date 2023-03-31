@@ -116,3 +116,35 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(OrderManagementException) as prueba:
             my_manager.send_product(input_file)
         self.assertEqual("JSON has not the expected structure", prueba.exception.message)
+
+    def test_ecv_13(self):
+        """duplico el campo 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba13.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON Decode Error - Wrong JSON Format", prueba.exception.message)
+
+    def test_ecv_14(self):
+        """OrderID esta borrado"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba14.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("Invalid JSON format", prueba.exception.message)
+
+    def test_ecv_15(self):
+        """duplico etiqueta 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba15.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON Decode Error - Wrong JSON Format", prueba.exception.message)
+
+    def test_ecv_16(self):
+        """duplico etiqueta 1"""
+        my_manager = OrderManager()
+        input_file = my_manager.path + "FR2Json/prueba16.json"
+        with self.assertRaises(OrderManagementException) as prueba:
+            my_manager.send_product(input_file)
+        self.assertEqual("JSON has not the expected structure", prueba.exception.message)
